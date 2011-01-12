@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Virastar do
@@ -98,32 +99,46 @@ describe Virastar do
   end
 
   it "should replace more than one space with just a single one" do
-    test   = "  hello   world! \nI'm virastar   "
-    result = "hello world! \nI'm virastar"
+    test   = "  hello   world!  I'm virastar   "
+    result = "hello world! I'm virastar"
     test.persian_cleanup.should   == result
   end
-  
-  # it "should fix spacing for () [] {}  “” «» `` '' \"\"" do
-  #   #[["(",")"],["[","]"],["{","}"], ]
-  #   test  = "this is( a test)"
-  #   test2 = "this is ( a test  )"
-  #   test3 = "this is  (  a test )  yeah!"
-  #   test4 = "this is   (a test )  yeah!"
-  #   result  = "this is (a test) "
-  #   result2 = "this is (a test) "
-  #   result3 = "this is (a test) yeah!"
-  #   result4 = "this is (a test) yeah!"
-  #   test.persian_cleanup.should   == result
-  #   test2.persian_cleanup.should  == result2
-  #   test3.persian_cleanup.should  == result3
-  #   test4.persian_cleanup.should  == result4
-  # end
 
-  # it "should put zwnj between word and prefix/suffix (ha haye tar tarin mi)"
-  # it "should replace percent and fraction sign to persian ٪٫"
-  # it "should remove unnecessary zwnj char that are succeeded/preceded by a space"
-  # it "should not replace english numbers and ,; in English phrases"
-  #
+  it "should remove unnecessary zwnj char that are succeeded/preceded by a space" do
+    test = "سلام‌ دنیا" # before
+    result = "سلام دنیا"
+    test2 = "سلام ‌دنیا" #after
+    result2 = "سلام دنیا"
+    test.persian_cleanup.should == result
+    test2.persian_cleanup.should == result2
+  end
+
+  it "should fix spacing for () [] {}  “” «» `` '' \"\"" do
+    #[["(",")"],["[","]"],["{","}"], ]
+    test  = "this is( a test)"
+    test2 = "this is ( a test  )"
+    test3 = "this is  (  a test )  yeah!"
+    test4 = "this is   (a test )  yeah!"
+    result  = "this is (a test)"
+    result2 = "this is (a test)"
+    result3 = "this is (a test) yeah!"
+    result4 = "this is (a test) yeah!"
+    test.persian_cleanup.should   == result
+    test2.persian_cleanup.should  == result2
+    test3.persian_cleanup.should  == result3
+    test4.persian_cleanup.should  == result4
+  end
+
+  it "should replace percent sign to persian" do
+    test = "%"
+    result = "٪"
+    test.persian_cleanup.should == result
+  end
+
+  it "should put zwnj between word and prefix/suffix (ha haye* tar* tarin mi* nami*)"
+  it "should not replace english numbers and ,; in English phrases"
+  it "should not replace line breaks"
+
   context "aggressive editing" do
     it "should replace more than one ! or ? mark with just one" do
       test    = "salam!!!"
@@ -139,7 +154,6 @@ describe Virastar do
       result = "سلامت"
       test.persian_cleanup.should == result
     end
-
   end
 
 end

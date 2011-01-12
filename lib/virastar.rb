@@ -1,15 +1,12 @@
-require "rubygems"
-require "diffy"
-
-# TODO test in ruby 1.9
-# TODO do not replace /n
-require 'jcode'
-$KCODE = 'u'
+# -*- encoding: utf-8 -*-
+if RUBY_VERSION.to_f < 1.9
+  require 'jcode'
+  $KCODE = 'u'
+end
 
 module Virastar
 
   # TODO: make a class and then extend string with another module that initialize that class
-
   def persian_cleanup
     # replace double dash to ndash and triple dash to mdash
     self.gsub!(/-{3}/,'—')
@@ -24,16 +21,18 @@ module Virastar
     # should convert ه ی to ه
     self.gsub!(/(\S)(ه[\s‌]+ی)(\s)/, '\1هٔ\3')
 
+    # remove unnecessary zwnj char that are succeeded/preceded by a space
+    self.gsub!(/\s+‌|‌\s+/,' ')
+
     # should fix spacing for () [] {}  “” «» `` '' ""
     self.gsub!(/\s*(\()\s*([^}]+)\s*(\))\s*/,' \1\2\3 ')
 
     # character replacement
-    bad  = "1234567890,;كي٠١٢٣٤٥٦٧٨٩"
-    good = "۱۲۳۴۵۶۷۸۹۰،؛کی۰۱۲۳۴۵۶۷۸۹"
+    bad  = "1234567890,;كي٠١٢٣٤٥٦٧٨٩%"
+    good = "۱۲۳۴۵۶۷۸۹۰،؛کی۰۱۲۳۴۵۶۷۸۹٪"
     self.tr!(bad,good)
 
-
-    # == Aggressive Editing ===========================================
+    # -- Aggressive Editing ------------------------------------------
 
     # replace more than one ! or ? mark with just one
     self.gsub!(/(!){2,}/, '\1')
@@ -42,7 +41,7 @@ module Virastar
     # should remove all kashida
     self.gsub!(/ـ+/,"")
 
-    # =================================================================
+    # ----------------------------------------------------------------
 
     # : ; , . ! ? and their persian equivalents should have one space after and no space before
     self.gsub!(/\s*([:;,؛،.؟!]{1})\s*/, '\1 ')
