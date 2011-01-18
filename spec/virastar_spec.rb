@@ -38,7 +38,7 @@ describe Virastar do
     test.persian_cleanup.should == result
   end
 
-  it "should replace English comma and semicolon to their Persian equivalent" do
+  it "should replace English comma and semicolon with their Persian equivalent" do
     test   = ";,"
     result = "؛ ،"
     test.persian_cleanup.should == result
@@ -104,7 +104,7 @@ describe Virastar do
     test.persian_cleanup.should   == result
   end
 
-  it "should remove unnecessary zwnj char that are succeeded/preceded by a space" do
+  it "should remove unnecessary zwnj chars that are succeeded/preceded by a space" do
     test = "سلام‌ دنیا" # before
     result = "سلام دنیا"
     test2 = "سلام ‌دنیا" #after
@@ -113,31 +113,56 @@ describe Virastar do
     test2.persian_cleanup.should == result2
   end
 
-  it "should fix spacing for () [] {}  “” «» `` '' \"\"" do
-    #[["(",")"],["[","]"],["{","}"], ]
-    test  = "this is( a test)"
-    test2 = "this is ( a test  )"
-    test3 = "this is  (  a test )  yeah!"
-    test4 = "this is   (a test )  yeah!"
-    result  = "this is (a test)"
-    result2 = "this is (a test)"
-    result3 = "this is (a test) yeah!"
-    result4 = "this is (a test) yeah!"
-    test.persian_cleanup.should   == result
-    test2.persian_cleanup.should  == result2
-    test3.persian_cleanup.should  == result3
-    test4.persian_cleanup.should  == result4
+  it "should fix spacing for () [] {}  “” «» (one space on outside, no space on inside)" do
+    [ ["(",")"],["[","]"],["{","}"],["“","”"],["«","»"] ].each do |b|
+      test  = "this is#{b[0]} a test#{b[1]}"
+      test2 = "this is #{b[0]} a test  #{b[1]}"
+      test3 = "this is  #{b[0]}  a test #{b[1]}  yeah!"
+      test4 = "this is   #{b[0]}a test #{b[1]}  yeah!"
+      result  = "this is #{b[0]}a test#{b[1]}"
+      result2 = "this is #{b[0]}a test#{b[1]}"
+      result3 = "this is #{b[0]}a test#{b[1]} yeah!"
+      result4 = "this is #{b[0]}a test#{b[1]} yeah!"
+      test.persian_cleanup.should   == result
+      test2.persian_cleanup.should  == result2
+      test3.persian_cleanup.should  == result3
+      test4.persian_cleanup.should  == result4
+    end
   end
 
-  it "should replace percent sign to persian" do
+  it "should replace English percent sign to its Persian equivalent" do
     test = "%"
     result = "٪"
     test.persian_cleanup.should == result
   end
 
+  it "should replace more that one line breaks with just one" do
+    test  = "this is \n \n \n     \n a test"
+    result = "this is \na test"
+    test2  = "this is\n\n\n\na test"
+    result2 = "this is \na test"
+    test3  = "this is \n\n\n\n    a test"
+    result3 = "this is \na test"
+
+    test.persian_cleanup.should  == result
+    test2.persian_cleanup.should  == result2
+    test3.persian_cleanup.should  == result3
+  end
+
+  it "should not replace line breaks" do
+    test  = "this is \n  a test"
+    result = "this is \na test"
+    test.persian_cleanup.should  == result
+  end
+
   it "should put zwnj between word and prefix/suffix (ha haye* tar* tarin mi* nami*)"
-  it "should not replace english numbers and ,; in English phrases"
-  it "should not replace line breaks"
+  
+  it "should not replace English numbers in English phrases" do
+    test = "عزیز ATM74 می رود در IBM-96 085 B 95BCS"
+    result = "عزیز ATM74 می رود در IBM-96 ۰۸۵ B 95BCS"
+    test.persian_cleanup.should  == result
+  end
+
 
   context "aggressive editing" do
     it "should replace more than one ! or ? mark with just one" do
@@ -154,6 +179,8 @@ describe Virastar do
       result = "سلامت"
       test.persian_cleanup.should == result
     end
+    
+    it "should correct wrong connections like in میشود or میدهد"
   end
 
 end

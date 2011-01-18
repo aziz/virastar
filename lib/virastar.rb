@@ -24,13 +24,24 @@ module Virastar
     # remove unnecessary zwnj char that are succeeded/preceded by a space
     self.gsub!(/\s+‌|‌\s+/,' ')
 
-    # should fix spacing for () [] {}  “” «» `` '' ""
-    self.gsub!(/\s*(\()\s*([^}]+)\s*(\))\s*/,' \1\2\3 ')
+    # should fix spacing for () [] {}  “” «»
+    self.gsub!(/\s*(\()\s*([^)]+?)\s*?(\))\s*/,' \1\2\3 ')
+    self.gsub!(/\s*(\[)\s*([^)]+?)\s*?(\])\s*/,' \1\2\3 ')
+    self.gsub!(/\s*(\{)\s*([^)]+?)\s*?(\})\s*/,' \1\2\3 ')
+    self.gsub!(/\s*(“)\s*([^)]+?)\s*?(”)\s*/,' \1\2\3 ')
+    self.gsub!(/\s*(«)\s*([^)]+?)\s*?(»)\s*/,' \1\2\3 ')
 
     # character replacement
     bad  = "1234567890,;كي٠١٢٣٤٥٦٧٨٩%"
     good = "۱۲۳۴۵۶۷۸۹۰،؛کی۰۱۲۳۴۵۶۷۸۹٪"
     self.tr!(bad,good)
+    
+    good_en = "1234567890"
+    bad_fa  = "۱۲۳۴۵۶۷۸۹۰"
+    # should not replace exnglish chars in english phrases
+    self.gsub!(/([a-z\-_]+[۰-۹]+|[۰-۹]+[a-z\-_]+)/i) do |s|
+      s.tr(bad_fa,good_en)
+    end
 
     # -- Aggressive Editing ------------------------------------------
 
@@ -48,6 +59,7 @@ module Virastar
 
     # should replace more than one space with just a single one
     self.gsub!(/[ ]+/,' ')
+    self.gsub!(/\s*[\n]+\s*/," \n")
 
     # remove spaces, tabs, and new lines from the beginning and enf of file
     self.strip!
