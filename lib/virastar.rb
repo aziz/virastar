@@ -120,7 +120,7 @@ end
 
 module VirastarStingExtensions
   def persian_cleanup(options = {})
-    editor = Virastar::PersianEditor.new(self,options)
+    editor = Virastar::PersianEditor.new(self.dup,options)
     return editor.cleanup
   end
 end
