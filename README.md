@@ -1,8 +1,11 @@
+-----
 #ویراستار
-
-ویراستار نوشته‌های فارسی شما را ویرایش می‌کند.
+نوشته‌های فارسی شما را ویرایش می‌کند
 
 -----
+Virastar (in Persian:ویراستار) 
+
+
 ## Specifications
 
 ###Virastar
@@ -32,10 +35,37 @@
   
 -----
 ## Install
-## Use
-use with options turned off
-inspired by
+    gem install virastar
 
+## Usage
+    "فارسي را كمی درست تر می نويسيم".persian_cleanup   # => "فارسی را کمی درست‌تر می‌نویسیم"
+
+virastar comes with a list of flags to control its behavior, all flags are turned on by default but you can
+turn them off by passing an options hash to the `persian_cleanup` method
+
+    "سلام 123".persian_cleanup(:fix_english_numbers => false) # => "سلام 123"
+
+here is the list of all flags:
+
+* `fix_dashes`
+* `fix_three_dots`
+* `fix_english_quotes`
+* `fix_hamzeh`
+* `cleanup_zwnj`
+* `fix_spacing_for_braces_and_quotes`
+* `fix_arabic_numbers`
+* `fix_english_numbers`
+* `fix_misc_non_persian_chars`
+* `fix_perfix_spacing`
+* `fix_suffix_spacing`
+* `aggresive`
+* `cleanup_kashidas`
+* `cleanup_extra_marks`
+* `cleanup_spacing`
+* `cleanup_begin_and_end`
+
+## Acknowledgment
+Virastar is highly inspired by [Virasbaz](http://virasbaz.persianlanguage.ir).
 
 ## Note on Patches/Pull Requests
  
