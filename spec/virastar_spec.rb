@@ -51,7 +51,7 @@ describe Virastar do
     test.persian_cleanup.should == result
   end
 
-  it "should replace English qoutes with their Persian equivalent" do
+  it "should replace English quotes with their Persian equivalent" do
     test  = "''تست''"
     test2 = "'تست'"
     test3 = "\"گفت: سلام\""
@@ -113,7 +113,7 @@ describe Virastar do
     test2.persian_cleanup.should == result2
   end
 
-  it "should fix spacing for () [] {}  “” «» (one space on outside, no space on inside)" do
+  it "should fix spacing for () [] {}  “” «» (one space outside, no space inside)" do
     [ ["(",")"],["[","]"],["{","}"],["“","”"],["«","»"] ].each do |b|
       test  = "this is#{b[0]} a test#{b[1]}"
       test2 = "this is #{b[0]} a test  #{b[1]}"
@@ -155,11 +155,21 @@ describe Virastar do
     test.persian_cleanup.should  == result
   end
 
-  it "should put zwnj between word and prefix/suffix (ha haye* tar* tarin mi* nami*)"
-  
+  it "should put zwnj between word and prefix/suffix (ha haye* tar* tarin mi* nemi*)" do
+    test    = "ما می توانیم"
+    result  = "ما می‌توانیم"
+    test2   = "ما نمی توانیم"
+    result2 = "ما نمی‌توانیم"
+    test3   = "این بهترین کتاب ها است"
+    result3 = "این بهترین کتاب‌ها است"
+    test4   = "بزرگ تر و قدرتمند ترین زبان های دنیا"
+    result4 = "بزرگ‌تر و قدرتمند‌ترین زبان‌های دنیا"
+    test.persian_cleanup.should == result
+  end
+
   it "should not replace English numbers in English phrases" do
-    test = "عزیز ATM74 می رود در IBM-96 085 B 95BCS"
-    result = "عزیز ATM74 می رود در IBM-96 ۰۸۵ B 95BCS"
+    test = "عزیز ATM74 در IBM-96 085 B 95BCS"
+    result = "عزیز ATM74 در IBM-96 ۰۸۵ B 95BCS"
     test.persian_cleanup.should  == result
   end
 
@@ -179,7 +189,7 @@ describe Virastar do
       result = "سلامت"
       test.persian_cleanup.should == result
     end
-    
+
     it "should correct wrong connections like in میشود or میدهد"
   end
 
