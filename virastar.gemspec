@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Allen A. Bargi"]
   s.email       = ["allen.bargi@gmail.com"]
   s.homepage    = "http://github.com/aziz/virastar"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{cleanning up Persian text!}
+  s.description = %q{cleanning up Persian text!}
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
