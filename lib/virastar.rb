@@ -39,10 +39,10 @@ module Virastar
       text.gsub!(/\s*\.{3,}/,'…') if @fix_three_dots
 
       # replace English quotes with their Persian equivalent
-      text.gsub!(/(["'`]+)(.+)(\1)/, '«\2»') if @fix_english_quotes
+      text.gsub!(/(["'`]+)(.+?)(\1)/, '«\2»') if @fix_english_quotes
 
       # should convert ه ی to ه
-      text.gsub!(/(\S)(ه[\s‌]+ی)(\s)/, '\1هٔ\3') if @fix_hamzeh
+      text.gsub!(/(\S)(ه[\s‌]+[یي])(\s)/, '\1هٔ\3') if @fix_hamzeh
 
       # remove unnecessary zwnj char that are succeeded/preceded by a space
       text.gsub!(/\s+‌|‌\s+/,' ') if @cleanup_zwnj
@@ -80,7 +80,7 @@ module Virastar
       # put zwnj between word and suffix (*tar *tarin *ha *haye)
       # there's a possible bug here: های and تر could be separate nouns and not suffix
       if @fix_suffix_spacing
-        text.gsub!(/\s+(تر(ین)?|ها(ی)?)\s+/,'‌\1 ')
+        text.gsub!(/\s+(تر(ی(ن)?)?|ها(ی)?)\s+/,'‌\1 ') # in case you can not read it: \s+(tar(i(n)?)?|ha(ye)?)\s+
       end
 
       # -- Aggressive Editing ------------------------------------------
@@ -100,13 +100,13 @@ module Virastar
 
       # : ; , . ! ? and their persian equivalents should have one space after and no space before
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/\s*([:;,؛،.؟!]{1})\s*/, '\1 ')
+        text.gsub!(/[ ‌	]*([:;,؛،.؟!]{1})[ ‌	]*/, '\1 ')
       end
 
       # should replace more than one space with just a single one
       if @cleanup_spacing
         text.gsub!(/[ ]+/,' ')
-        text.gsub!(/\s*[\n]+\s*/," \n")
+        #text.gsub!(/\s*[\n]+\s*/," \n")
       end
 
       # remove spaces, tabs, and new lines from the beginning and enf of file

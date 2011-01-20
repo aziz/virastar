@@ -47,8 +47,10 @@ describe Virastar do
   it "should correct :;,.?! spacing (one space after and no space before)" do
     test   = "گفت : سلام"
     result = "گفت: سلام"
-    #puts Diffy::Diff.new(test, result).to_s(:color) # TODO: char diff
+    test2 = "salam.\n\nkhoobi"
+    result2 = "salam. \n\nkhoobi"
     test.persian_cleanup.should == result
+    test2.persian_cleanup.should == result2
   end
 
   it "should replace English quotes with their Persian equivalent" do
@@ -59,11 +61,15 @@ describe Virastar do
     test5 = "``تست``"
     result = result2 = result4 = result5 = "«تست»"
     result3 = "«گفت: سلام»"
+    # not greedy
+    test6 = '"this" or "that"'
+    result6 = '«this» or «that»'
     test.persian_cleanup.should  == result
     test2.persian_cleanup.should == result2
     test3.persian_cleanup.should == result3
     test4.persian_cleanup.should == result4
     test5.persian_cleanup.should == result5
+    test6.persian_cleanup.should == result6
   end
 
   it "should replace three dots with ellipsis" do
@@ -84,9 +90,11 @@ describe Virastar do
   it "should convert ه ی to هٔ"  do
     test = "خانه ی ما"
     test2 = "خانه ی ما"
-    result = result2 = "خانهٔ ما"
+    test3 = "خانه ي ما"
+    result = result2 = result3 = "خانهٔ ما"
     test.persian_cleanup.should   == result
     test2.persian_cleanup.should  == result2
+    test3.persian_cleanup.should  == result3
   end
 
   it "should replace double dash to ndash and triple dash to mdash" do
@@ -162,8 +170,8 @@ describe Virastar do
     result2 = "ما نمی‌توانیم"
     test3   = "این بهترین کتاب ها است"
     result3 = "این بهترین کتاب‌ها است"
-    test4   = "بزرگ تر و قدرتمند ترین زبان های دنیا"
-    result4 = "بزرگ‌تر و قدرتمند‌ترین زبان‌های دنیا"
+    test4   = "بزرگ تری و قدرتمند ترین زبان های دنیا"
+    result4 = "بزرگ‌تری و قدرتمند‌ترین زبان‌های دنیا"
     test.persian_cleanup.should == result
   end
 
