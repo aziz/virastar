@@ -47,15 +47,6 @@ module Virastar
       # remove unnecessary zwnj char that are succeeded/preceded by a space
       text.gsub!(/\s+‌|‌\s+/,' ') if @cleanup_zwnj
 
-      # should fix spacing for () [] {}  “” «»
-      if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/\s*(\()\s*([^)]+?)\s*?(\))\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(\[)\s*([^)]+?)\s*?(\])\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(\{)\s*([^)]+?)\s*?(\})\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(“)\s*([^)]+?)\s*?(”)\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(«)\s*([^)]+?)\s*?(»)\s*/,' \1\2\3 ')
-      end
-
       # character replacement
       persian_numbers = "۱۲۳۴۵۶۷۸۹۰"
       arabic_numbers  = "١٢٣٤٥٦٧٨٩٠"
@@ -101,12 +92,25 @@ module Virastar
       # : ; , . ! ? and their persian equivalents should have one space after and no space before
       if @fix_spacing_for_braces_and_quotes
         text.gsub!(/[ ‌	]*([:;,؛،.؟!]{1})[ ‌	]*/, '\1 ')
+        # do not put space after colon that separates time parts
+        text.gsub!(/([۰-۹]+):\s+([۰-۹]+)/, '\1:\2')
+      end
+      
+      
+
+      # should fix spacing for () [] {}  “” «»
+      if @fix_spacing_for_braces_and_quotes
+        text.gsub!(/\s*(\()\s*([^)]+?)\s*?(\))\s*/,' \1\2\3 ')
+        text.gsub!(/\s*(\[)\s*([^)]+?)\s*?(\])\s*/,' \1\2\3 ')
+        text.gsub!(/\s*(\{)\s*([^)]+?)\s*?(\})\s*/,' \1\2\3 ')
+        text.gsub!(/\s*(“)\s*([^)]+?)\s*?(”)\s*/,' \1\2\3 ')
+        text.gsub!(/\s*(«)\s*([^)]+?)\s*?(»)\s*/,' \1\2\3 ')
       end
 
       # should replace more than one space with just a single one
       if @cleanup_spacing
         text.gsub!(/[ ]+/,' ')
-        #text.gsub!(/\s*[\n]+\s*/," \n")
+        text.gsub!(/([\n]+)[ 	‌]*/,'\1')
       end
 
       # remove spaces, tabs, and new lines from the beginning and enf of file

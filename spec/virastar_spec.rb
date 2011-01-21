@@ -145,19 +145,19 @@ describe Virastar do
   end
 
   it "should replace more that one line breaks with just one" do
-    test  = "this is \n \n \n     \n a test"
-    result = "this is \na test"
-    test2  = "this is\n\n\n\na test"
-    result2 = "this is \na test"
-    test3  = "this is \n\n\n\n    a test"
-    result3 = "this is \na test"
+    test    = "this is \n \n \n     \n a test"
+    result  = "this is \n\n\n\na test"
+    test2   = "this is\n\n\n\na test"
+    result2 = "this is\n\n\n\na test"
+    test3   = "this is \n\n\n    a test"
+    result3 = "this is \n\n\na test"
 
     test.persian_cleanup.should  == result
     test2.persian_cleanup.should  == result2
     test3.persian_cleanup.should  == result3
   end
 
-  it "should not replace line breaks" do
+  it "should not replace line breaks and should remove spaces after line break" do
     test  = "this is \n  a test"
     result = "this is \na test"
     test.persian_cleanup.should  == result
@@ -181,6 +181,23 @@ describe Virastar do
     test.persian_cleanup.should  == result
   end
 
+  it "should not create spacing for something like (,)" do
+    test = "(,)"
+    result = "(،)"
+    test.persian_cleanup.should  == result
+  end
+
+  it "should not puts space after time colon separator" do
+    test = "12:34"
+    result = "۱۲:۳۴"
+    test.persian_cleanup.should  == result
+  end
+  
+  it "should not destroy URLs" do
+    test = "http://virastar.heroku.com"
+    result = "http://virastar.heroku.com"
+    test.persian_cleanup.should  == result    
+  end
 
   context "aggressive editing" do
     it "should replace more than one ! or ? mark with just one" do
