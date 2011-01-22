@@ -100,11 +100,11 @@ module Virastar
 
       # should fix spacing for () [] {}  “” «»
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/\s*(\()\s*([^)]+?)\s*?(\))\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(\[)\s*([^)]+?)\s*?(\])\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(\{)\s*([^)]+?)\s*?(\})\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(“)\s*([^)]+?)\s*?(”)\s*/,' \1\2\3 ')
-        text.gsub!(/\s*(«)\s*([^)]+?)\s*?(»)\s*/,' \1\2\3 ')
+        text.gsub!(/[ 	‌]*(\()\s*([^)]+?)\s*?(\))[ 	‌]*/,' \1\2\3 ')
+        text.gsub!(/[ 	‌]*(\[)\s*([^)]+?)\s*?(\])[ 	‌]*/,' \1\2\3 ')
+        text.gsub!(/[ 	‌]*(\{)\s*([^)]+?)\s*?(\})[ 	‌]*/,' \1\2\3 ')
+        text.gsub!(/[ 	‌]*(“)\s*([^)]+?)\s*?(”)[ 	‌]*/,' \1\2\3 ')
+        text.gsub!(/[ 	‌]*(«)\s*([^)]+?)\s*?(»)[ 	‌]*/,' \1\2\3 ')
       end
 
       # should replace more than one space with just a single one

@@ -1,4 +1,4 @@
-- destories /n if the line ends with ""
+
 - do not destroy urls dots and colons
 /https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?/
 
@@ -6,5 +6,6 @@
 
 
 DONE:
+- destories /n if the line ends with ""
 - spacing after , : ; causing a lot of problem in this case (,) => (, )
 - do not put space after : in the context of numbers like hour 19:45 => ۱۹:۴۵

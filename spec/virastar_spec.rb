@@ -201,8 +201,8 @@ describe Virastar do
    #end
 
   it "should not replace line breaks when the line ends with quotes" do
-    test = 'استفاده از "گيومه های فارسي"\nساده است'
-    result = 'استفاده از «گیومه‌های فارسی» \nساده است'
+    test = "salam \"khoobi\" \n chetori"
+    result = "salam «khoobi» \nchetori"
     test.persian_cleanup.should  == result
   end
 
