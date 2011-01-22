@@ -182,8 +182,8 @@ describe Virastar do
   end
 
   it "should not create spacing for something like (,)" do
-    test = "(,)"
-    result = "(،)"
+    test = "this is (,) comma"
+    result = "this is (،) comma"
     test.persian_cleanup.should  == result
   end
 
@@ -192,11 +192,18 @@ describe Virastar do
     result = "۱۲:۳۴"
     test.persian_cleanup.should  == result
   end
-  
-  it "should not destroy URLs" do
-    test = "http://virastar.heroku.com"
-    result = "http://virastar.heroku.com"
-    test.persian_cleanup.should  == result    
+
+  it "should not destroy URLs"
+   # do
+   #    test = "http://virastar.heroku.com"
+   #    result = "http://virastar.heroku.com"
+   #    test.persian_cleanup.should  == result
+   #end
+
+  it "should not replace line breaks when the line ends with quotes" do
+    test = 'استفاده از "گيومه های فارسي"\nساده است'
+    result = 'استفاده از «گیومه‌های فارسی» \nساده است'
+    test.persian_cleanup.should  == result
   end
 
   context "aggressive editing" do
