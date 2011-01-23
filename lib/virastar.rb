@@ -29,6 +29,16 @@ module Virastar
 
     def cleanup
       text = @text
+
+      # removing URLS bringing them back at the end of process
+      urls = []
+      i = 0
+      text.gsub!(/https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?/) do |s|
+        urls[i] = s.dup
+        i += 1
+        "__urls__#{i}__"
+      end
+
       # replace double dash to ndash and triple dash to mdash
       if @fix_dashes
         text.gsub!(/-{3}/,'—')
@@ -89,32 +99,44 @@ module Virastar
       end
       # ----------------------------------------------------------------
 
+      # should fix outside and inside spacing for () [] {}  “” «»
+      if @fix_spacing_for_braces_and_quotes
+        text.gsub!(/[   ‌]*(\()\s*([^)]+?)\s*?(\))[   ‌]*/,' \1\2\3 ')
+        text.gsub!(/[   ‌]*(\[)\s*([^)]+?)\s*?(\])[   ‌]*/,' \1\2\3 ')
+        text.gsub!(/[   ‌]*(\{)\s*([^)]+?)\s*?(\})[   ‌]*/,' \1\2\3 ')
+        text.gsub!(/[   ‌]*(“)\s*([^)]+?)\s*?(”)[   ‌]*/,' \1\2\3 ')
+        text.gsub!(/[   ‌]*(«)\s*([^)]+?)\s*?(»)[   ‌]*/,' \1\2\3 ')
+      end
+
       # : ; , . ! ? and their persian equivalents should have one space after and no space before
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/[ ‌	]*([:;,؛،.؟!]{1})[ ‌	]*/, '\1 ')
+        text.gsub!(/[ ‌  ]*([:;,؛،.؟!]{1})[ ‌  ]*/, '\1 ')
         # do not put space after colon that separates time parts
         text.gsub!(/([۰-۹]+):\s+([۰-۹]+)/, '\1:\2')
       end
-      
-      
 
-      # should fix spacing for () [] {}  “” «»
+      # should fix inside spacing for () [] {}  “” «»
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/[ 	‌]*(\()\s*([^)]+?)\s*?(\))[ 	‌]*/,' \1\2\3 ')
-        text.gsub!(/[ 	‌]*(\[)\s*([^)]+?)\s*?(\])[ 	‌]*/,' \1\2\3 ')
-        text.gsub!(/[ 	‌]*(\{)\s*([^)]+?)\s*?(\})[ 	‌]*/,' \1\2\3 ')
-        text.gsub!(/[ 	‌]*(“)\s*([^)]+?)\s*?(”)[ 	‌]*/,' \1\2\3 ')
-        text.gsub!(/[ 	‌]*(«)\s*([^)]+?)\s*?(»)[ 	‌]*/,' \1\2\3 ')
+        text.gsub!(/(\()\s*([^)]+?)\s*?(\))/,'\1\2\3')
+        text.gsub!(/(\[)\s*([^)]+?)\s*?(\])/,'\1\2\3')
+        text.gsub!(/(\{)\s*([^)]+?)\s*?(\})/,'\1\2\3')
+        text.gsub!(/(“)\s*([^)]+?)\s*?(”)/,'\1\2\3')
+        text.gsub!(/(«)\s*([^)]+?)\s*?(»)/,'\1\2\3')
       end
 
       # should replace more than one space with just a single one
       if @cleanup_spacing
         text.gsub!(/[ ]+/,' ')
-        text.gsub!(/([\n]+)[ 	‌]*/,'\1')
+        text.gsub!(/([\n]+)[   ‌]*/,'\1')
       end
 
       # remove spaces, tabs, and new lines from the beginning and enf of file
       text.strip! if @cleanup_begin_and_end
+
+      # bringing back urls
+      text.gsub!(/__urls__\d+__/) do |s|
+        urls[s.split("__").last.to_i - 1]
+      end
 
       text
     end

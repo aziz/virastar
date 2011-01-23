@@ -193,16 +193,24 @@ describe Virastar do
     test.persian_cleanup.should  == result
   end
 
-  it "should not destroy URLs"
-   # do
-   #    test = "http://virastar.heroku.com"
-   #    result = "http://virastar.heroku.com"
-   #    test.persian_cleanup.should  == result
-   #end
+  it "should not destroy URLs" do
+      test = "http://virastar.heroku.com"
+      result = "http://virastar.heroku.com"
+      test2 = "http://virastar.heroku.com\nhttp://balatarin.com"
+      result2 = "http://virastar.heroku.com\nhttp://balatarin.com"
+      test.persian_cleanup.should  == result
+      test2.persian_cleanup.should  == result2
+   end
 
   it "should not replace line breaks when the line ends with quotes" do
     test = "salam \"khoobi\" \n chetori"
     result = "salam «khoobi» \nchetori"
+    test.persian_cleanup.should  == result
+  end
+  
+  it "should not put space after quotes, {}, () or [] if there's ,.; just after that" do
+    test = "«This», {this}, (this), [this] or {this}. sometimes (this)."
+    result = "«This»، {this}، (this)، [this] or {this}. sometimes (this)."
     test.persian_cleanup.should  == result
   end
 
