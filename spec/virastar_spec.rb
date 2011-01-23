@@ -207,10 +207,16 @@ describe Virastar do
     result = "salam «khoobi» \nchetori"
     test.persian_cleanup.should  == result
   end
-  
+
   it "should not put space after quotes, {}, () or [] if there's ,.; just after that" do
     test = "«This», {this}, (this), [this] or {this}. sometimes (this)."
     result = "«This»، {this}، (this)، [this] or {this}. sometimes (this)."
+    test.persian_cleanup.should  == result
+  end
+
+  it "should be able to convert numbers with dashes" do
+    test = "1- salam"
+    result = "۱- salam"
     test.persian_cleanup.should  == result
   end
 

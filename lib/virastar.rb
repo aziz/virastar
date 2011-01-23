@@ -68,7 +68,7 @@ module Virastar
       text.tr!(bad_chars,good_chars) if @fix_misc_non_persian_chars
 
       # should not replace exnglish chars in english phrases
-      text.gsub!(/([a-z\-_]+[۰-۹]+|[۰-۹]+[a-z\-_]+)/i) do |s|
+      text.gsub!(/([a-z\-_]{2,}[۰-۹]+|[۰-۹]+[a-z\-_]{2,})/i) do |s|
         s.tr(persian_numbers,english_numbers)
       end
 
