@@ -28,7 +28,8 @@ Virastar (in Persian:ویراستار)
 * should not replace line breaks
 * should put zwnj between word and prefix/suffix (ha haye* tar* tarin mi* nemi*)
 * should not replace English numbers in English phrases
-  
+* should not destroy urls in the text
+
 #### aggressive editing
   * should replace more than one ! or ? mark with just one
   * should remove all kashidas
