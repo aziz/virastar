@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    virastar (0.0.2)
+    virastar (0.0.6)
 
 GEM
   remote: http://rubygems.org/
