@@ -122,6 +122,7 @@ describe Virastar do
   end
 
   it "should fix spacing for () [] {}  “” «» (one space outside, no space inside)" do
+    # matched brackets
     [ ["(",")"],["[","]"],["{","}"],["“","”"],["«","»"] ].each do |b|
       test  = "this is#{b[0]} a test#{b[1]}"
       test2 = "this is #{b[0]} a test  #{b[1]}"
@@ -136,6 +137,19 @@ describe Virastar do
       test3.persian_cleanup.should  == result3
       test4.persian_cleanup.should  == result4
     end
+    
+    # mismatched brackets
+    [ ["(","]"],["[",")"],["{","”"],["(","}"],["«","]"] ].each do |b|
+      test  = "mismatched brackets#{b[0]} don't apply#{b[1]}"
+      test2 = "mismatched brackets #{b[0]} don't apply #{b[1]}"
+      test3 = "mismatched brackets #{b[0]} don't apply #{b[1]} yeah!"
+      test4 = "mismatched brackets #{b[0]}don't apply #{b[1]} yeah!"
+      test.persian_cleanup.should   == test
+      test2.persian_cleanup.should  == test2
+      test3.persian_cleanup.should  == test3
+      test4.persian_cleanup.should  == test4
+    end
+    
   end
 
   it "should replace English percent sign to its Persian equivalent" do
