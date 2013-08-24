@@ -68,7 +68,7 @@ module Virastar
       text.tr!(bad_chars,good_chars) if @fix_misc_non_persian_chars
 
       # should not replace exnglish chars in english phrases
-      text.gsub!(/([a-z\-_]{2,}[۰-۹]+|[۰-۹]+[a-z\-_]{2,})/i) do |s|
+      text.gsub!(/([a-zA-Z\-_]{2,}[۰-۹]+|[۰-۹]+[a-zA-Z\-_]{2,})/i) do |s|
         s.tr(persian_numbers,english_numbers)
       end
 
@@ -101,16 +101,16 @@ module Virastar
 
       # should fix outside and inside spacing for () [] {}  “” «»
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/[   ‌]*(\()\s*([^)]+?)\s*?(\))[   ‌]*/,' \1\2\3 ')
-        text.gsub!(/[   ‌]*(\[)\s*([^)]+?)\s*?(\])[   ‌]*/,' \1\2\3 ')
-        text.gsub!(/[   ‌]*(\{)\s*([^)]+?)\s*?(\})[   ‌]*/,' \1\2\3 ')
-        text.gsub!(/[   ‌]*(“)\s*([^)]+?)\s*?(”)[   ‌]*/,' \1\2\3 ')
-        text.gsub!(/[   ‌]*(«)\s*([^)]+?)\s*?(»)[   ‌]*/,' \1\2\3 ')
+        text.gsub!(/[ \t‌]*(\()\s*([^)]+?)\s*?(\))[ \t‌]*/,' \1\2\3 ')
+        text.gsub!(/[ \t‌]*(\[)\s*([^\]]+?)\s*?(\])[ \t‌]*/,' \1\2\3 ')
+        text.gsub!(/[ \t‌]*(\{)\s*([^}]+?)\s*?(\})[ \t‌]*/,' \1\2\3 ')
+        text.gsub!(/[ \t‌]*(“)\s*([^”]+?)\s*?(”)[ \t‌]*/,' \1\2\3 ')
+        text.gsub!(/[ \t‌]*(«)\s*([^»]+?)\s*?(»)[ \t‌]*/,' \1\2\3 ')
       end
 
       # : ; , . ! ? and their persian equivalents should have one space after and no space before
       if @fix_spacing_for_braces_and_quotes
-        text.gsub!(/[ ‌  ]*([:;,؛،.؟!]{1})[ ‌  ]*/, '\1 ')
+        text.gsub!(/[ \t‌]*([:;,؛،.؟!]{1})[ \t‌]*/, '\1 ')
         # do not put space after colon that separates time parts
         text.gsub!(/([۰-۹]+):\s+([۰-۹]+)/, '\1:\2')
       end
@@ -118,16 +118,16 @@ module Virastar
       # should fix inside spacing for () [] {}  “” «»
       if @fix_spacing_for_braces_and_quotes
         text.gsub!(/(\()\s*([^)]+?)\s*?(\))/,'\1\2\3')
-        text.gsub!(/(\[)\s*([^)]+?)\s*?(\])/,'\1\2\3')
-        text.gsub!(/(\{)\s*([^)]+?)\s*?(\})/,'\1\2\3')
-        text.gsub!(/(“)\s*([^)]+?)\s*?(”)/,'\1\2\3')
-        text.gsub!(/(«)\s*([^)]+?)\s*?(»)/,'\1\2\3')
+        text.gsub!(/(\[)\s*([^\]]+?)\s*?(\])/,'\1\2\3')
+        text.gsub!(/(\{)\s*([^}]+?)\s*?(\})/,'\1\2\3')
+        text.gsub!(/(“)\s*([^”]+?)\s*?(”)/,'\1\2\3')
+        text.gsub!(/(«)\s*([^»]+?)\s*?(»)/,'\1\2\3')
       end
 
       # should replace more than one space with just a single one
       if @cleanup_spacing
         text.gsub!(/[ ]+/,' ')
-        text.gsub!(/([\n]+)[   ‌]*/,'\1')
+        text.gsub!(/([\n]+)[ \t‌]*/,'\1')
       end
 
       # remove spaces, tabs, and new lines from the beginning and enf of file
