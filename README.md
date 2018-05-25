@@ -1,5 +1,5 @@
 -----
-#ویراستار
+# ویراستار 
 نوشته‌های فارسی شما را ویرایش می‌کند
 
 -----
@@ -8,7 +8,7 @@ Virastar (in Persian:ویراستار)
 
 ## Specifications
 
-###Virastar
+### Virastar
 * should add persian_cleanup method to String class
 * should replace Arabic kaf with its Persian equivalent
 * should replace Arabic Yeh with its Persian equivalent
